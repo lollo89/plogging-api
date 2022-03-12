@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +40,8 @@ class PloggingQueryServiceTest {
     @Mock
     RaceRepository repository;
 
+    private Date TEN_DAYS_AGO = Date.from(Instant.now().minus(10, ChronoUnit.DAYS));
+    private Date FIVE_DAYS_AGO = Date.from(Instant.now().minus(5, ChronoUnit.DAYS));
     
 
     @BeforeEach
@@ -49,7 +52,7 @@ class PloggingQueryServiceTest {
     @Test
     void testGetCompanyPickedUpKilos_ifEmptyReturn0() {
         List<Race> races = List.of(
-            new Race().setId(1).setRaceDate(new Date(2022, 03, 1)).setName("Test race")
+            new Race().setId(1).setRaceDate(TEN_DAYS_AGO).setName("Test race")
         );
 
         Date from = Date.from(Instant.now());
@@ -65,7 +68,7 @@ class PloggingQueryServiceTest {
     @Test
     void testGetCompanyPickedUpKilos_withOneRaceAndMultipleRunnerReturnSum() {
         List<Race> races = List.of(
-            new Race().setId(1).setRaceDate(new Date(2022, 03, 1)).setName("Test race").setRunners(
+            new Race().setId(1).setRaceDate(TEN_DAYS_AGO).setName("Test race").setRunners(
                 Set.of(new EmployeeRace().setPickedUpKilograms(15f),new EmployeeRace().setPickedUpKilograms(30f))
             )
         );
@@ -83,10 +86,10 @@ class PloggingQueryServiceTest {
     @Test
     void testGetCompanyPickedUpKilos_withMultipleRaceAndMultipleRunnerReturnSum() {
         List<Race> races = List.of(
-            new Race().setId(1).setRaceDate(new Date(2022, 03, 1)).setName("Test race").setRunners(
+            new Race().setId(1).setRaceDate(TEN_DAYS_AGO).setName("Test race").setRunners(
                 Set.of(new EmployeeRace().setPickedUpKilograms(15f),new EmployeeRace().setPickedUpKilograms(30f))
             ),
-            new Race().setId(1).setRaceDate(new Date(2022, 04, 1)).setName("Test race 2").setRunners(
+            new Race().setId(1).setRaceDate(FIVE_DAYS_AGO).setName("Test race 2").setRunners(
                 Set.of(new EmployeeRace().setPickedUpKilograms(5f),new EmployeeRace().setPickedUpKilograms(7f))
             )
         );
@@ -107,8 +110,8 @@ class PloggingQueryServiceTest {
         Employee employee2 = new Employee().setId(12).setFirstName("Test").setLastName("Two").setEmail("t.two@plogging.local");
 
         List<Race> races = List.of(
-            new Race().setId(1).setRaceDate(new Date(2022, 03, 1)).setName("Test race"),
-            new Race().setId(2).setRaceDate(new Date(2022, 04, 1)).setName("Test race 2")
+            new Race().setId(1).setRaceDate(TEN_DAYS_AGO).setName("Test race"),
+            new Race().setId(2).setRaceDate(FIVE_DAYS_AGO).setName("Test race 2")
         );
 
         races.stream().forEach(race -> race.setRunners(Set.of(
@@ -120,7 +123,7 @@ class PloggingQueryServiceTest {
         when(repository.findByRaceDateBetween(from, from)).thenReturn(races);
 
         // Act
-        Set<EmployeePickedUpKilosDto> kilosPerEmployees = service.getPickedUpKilosPerEmployee(from, from);
+        List<EmployeePickedUpKilosDto> kilosPerEmployees = service.getPickedUpKilosPerEmployee(from, from);
 
         // Assert
         assertEquals(2, kilosPerEmployees.size());
@@ -133,7 +136,7 @@ class PloggingQueryServiceTest {
         Employee employee1 = new Employee().setId(10).setFirstName("Test").setLastName("One").setEmail("t.one@plogging.local");
         Employee employee2 = new Employee().setId(12).setFirstName("Test").setLastName("Two").setEmail("t.two@plogging.local");
 
-        Race race = new Race().setId(1).setRaceDate(new Date(2022, 03, 1)).setName("Test race");
+        Race race = new Race().setId(1).setRaceDate(TEN_DAYS_AGO).setName("Test race");
         race.setRunners(Set.of(
             new EmployeeRace(employee1, race, 5f * race.getId() * employee1.getId()),
             new EmployeeRace(employee2, race, 3f * race.getId() * employee2.getId())
@@ -146,7 +149,7 @@ class PloggingQueryServiceTest {
 
         assertEquals(1, raceDetail.getId());
         assertEquals("Test race", raceDetail.getName());
-        assertEquals(new Date(2022, 03, 1), raceDetail.getDate());
+        assertEquals(TEN_DAYS_AGO, raceDetail.getDate());
         assertEquals(86f, raceDetail.getRunners().stream().mapToDouble(k -> k.getPickedUpKilos()).sum());
     }
 
@@ -159,8 +162,8 @@ class PloggingQueryServiceTest {
     @Test
     void testGetRaces_ObtainListOfRaceDto() {
         List<Race> races = List.of(
-            new Race().setId(1).setRaceDate(new Date(2022, 03, 1)).setName("Test race"),
-            new Race().setId(2).setRaceDate(new Date(2022, 04, 1)).setName("Test race 2")
+            new Race().setId(1).setRaceDate(TEN_DAYS_AGO).setName("Test race"),
+            new Race().setId(2).setRaceDate(FIVE_DAYS_AGO).setName("Test race 2")
         );
 
         when(repository.findAll()).thenReturn(races);

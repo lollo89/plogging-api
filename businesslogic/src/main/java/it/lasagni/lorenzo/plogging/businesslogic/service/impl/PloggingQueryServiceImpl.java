@@ -45,7 +45,7 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
     }
 
     @Override
-    public Set<EmployeePickedUpKilosDto> getPickedUpKilosPerEmployee(Date from, Date to) 
+    public List<EmployeePickedUpKilosDto> getPickedUpKilosPerEmployee(Date from, Date to) 
     {
 
         Set<Entry<Employee, Double>> pippo = this.raceRepository
@@ -60,7 +60,7 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
                                                     )
                                                     .entrySet();
 
-        return pippo.stream().map(x -> EmployeesPickedUpKilosDtoMapper.fromEntryEmployeeKilos(x)).collect(Collectors.toSet());
+        return pippo.stream().map(x -> EmployeesPickedUpKilosDtoMapper.fromEntryEmployeeKilos(x)).collect(Collectors.toList());
     }
 
     @Override
