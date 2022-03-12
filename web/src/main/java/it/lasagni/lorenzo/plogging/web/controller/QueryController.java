@@ -1,12 +1,15 @@
 package it.lasagni.lorenzo.plogging.web.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.lasagni.lorenzo.plogging.businesslogic.dto.EmployeePickedUpKilosDto;
 import it.lasagni.lorenzo.plogging.businesslogic.dto.RaceDto;
 import it.lasagni.lorenzo.plogging.businesslogic.service.PloggingQueryService;
 
@@ -24,5 +27,10 @@ public class QueryController {
     @GetMapping("/races/{raceId}")
     public RaceDto detail(@PathVariable int raceId) {
         return service.getRaceDetail(raceId);
+    }
+
+    @GetMapping("/kilos-per-employee")
+    public List<EmployeePickedUpKilosDto> kilosPerEmployee(@RequestParam Date from, @RequestParam Date to) {
+        return service.getPickedUpKilosPerEmployee(from, to);
     }
 }
