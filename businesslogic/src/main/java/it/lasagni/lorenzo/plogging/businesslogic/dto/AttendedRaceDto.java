@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class AttendedRaceDto {
 
-    private Integer employeeId;
+    private String employeeEmail;
     private Integer raceId;
     private Float pickedUpKilos;
 

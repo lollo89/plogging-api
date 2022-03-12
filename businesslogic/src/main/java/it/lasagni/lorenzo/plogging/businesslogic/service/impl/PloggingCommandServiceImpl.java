@@ -29,23 +29,23 @@ public class PloggingCommandServiceImpl implements PloggingCommandService {
 
     @Override
     public void raceAttended(AttendedRaceDto attendedRace) {
+        Employee employee = employeeRepository
+            .findByEmail(attendedRace.getEmployeeEmail())
+            .orElseThrow(() -> new EmployeeNotFoundException(attendedRace.getEmployeeEmail()));
+
         EmployeeRace partecipation = partecipationRepository
-            .findById(new EmployeeRaceId(attendedRace.getEmployeeId(), attendedRace.getRaceId()))
-            .orElseGet(() -> CreateEmployeeRaceFromIds(attendedRace.getRaceId(), attendedRace.getEmployeeId()));
+            .findById(new EmployeeRaceId(employee.getId(), attendedRace.getRaceId()))
+            .orElseGet(() -> CreateEmployeeRaceFromIds(attendedRace.getRaceId(), employee));
      
         partecipation.setPickedUpKilograms(attendedRace.getPickedUpKilos());
 
         partecipationRepository.save(partecipation);
     }
     
-    protected EmployeeRace CreateEmployeeRaceFromIds(int raceId, int employeeId) {
+    protected EmployeeRace CreateEmployeeRaceFromIds(int raceId, Employee employee) {
         Race race = raceRepository
             .findById(raceId)
             .orElseThrow(() -> new RaceNotFoundException(raceId));
-        
-        Employee employee = employeeRepository
-            .findById(employeeId)
-            .orElseThrow(() -> new EmployeeNotFoundException(employeeId));
 
         return new EmployeeRace(employee, race, 0f);
     }

@@ -20,7 +20,6 @@ public class EmployeesPickedUpKilosDtoMapper {
     public static EmployeePickedUpKilosDto fromEntryEmployeeKilos(Entry<Employee, Double> entry) 
     {
         return new EmployeePickedUpKilosDto()
-                        .setEmployeeId(entry.getKey().getId())
                         .setEmployeeName(EmployeeNameFromEmployee(entry.getKey()))
                         .setPickedUpKilos(entry.getValue().floatValue());
 

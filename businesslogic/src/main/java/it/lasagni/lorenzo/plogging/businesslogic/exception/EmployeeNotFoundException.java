@@ -4,11 +4,11 @@ import lombok.Getter;
 
 public class EmployeeNotFoundException extends RuntimeException {
     
-    @Getter private Integer IdNotFound;
+    @Getter private String EmailNotFound;
 
-    public EmployeeNotFoundException(Integer id) {
-        super("Employee " + id + " not found");
+    public EmployeeNotFoundException(String email) {
+        super("Employee " + email + " not found");
 
-        this.IdNotFound = id;
+        this.EmailNotFound = email;
     }
 }

@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,7 +32,7 @@ public class QueryController {
     }
 
     @GetMapping("/kilos-per-employee")
-    public List<EmployeePickedUpKilosDto> kilosPerEmployee(@RequestParam Date from, @RequestParam Date to) {
+    public List<EmployeePickedUpKilosDto> kilosPerEmployee(@RequestParam @DateTimeFormat(iso = ISO.DATE) Date from, @RequestParam @DateTimeFormat(iso = ISO.DATE) Date to) {
         return service.getPickedUpKilosPerEmployee(from, to);
     }
 }

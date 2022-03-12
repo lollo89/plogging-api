@@ -8,7 +8,6 @@ import lombok.experimental.Accessors;
 @Setter
 @Accessors(chain = true)
 public class EmployeePickedUpKilosDto {
-    private int employeeId;
     private String employeeName;
     private float pickedUpKilos;
 

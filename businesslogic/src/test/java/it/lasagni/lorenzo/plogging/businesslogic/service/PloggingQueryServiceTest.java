@@ -127,8 +127,8 @@ class PloggingQueryServiceTest {
 
         // Assert
         assertEquals(2, kilosPerEmployees.size());
-        assertTrue(kilosPerEmployees.stream().anyMatch(ek -> ek.getEmployeeName().equals("Test One") && ek.getPickedUpKilos() == 150f && ek.getEmployeeId() == 10));
-        assertTrue(kilosPerEmployees.stream().anyMatch(ek -> ek.getEmployeeName().equals("Test Two") && ek.getPickedUpKilos() == 108f && ek.getEmployeeId() == 12));
+        assertTrue(kilosPerEmployees.stream().anyMatch(ek -> ek.getEmployeeName().equals("Test One") && ek.getPickedUpKilos() == 150f));
+        assertTrue(kilosPerEmployees.stream().anyMatch(ek -> ek.getEmployeeName().equals("Test Two") && ek.getPickedUpKilos() == 108f));
     }
 
     @Test
