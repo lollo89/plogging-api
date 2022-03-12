@@ -1,6 +1,7 @@
 package it.lasagni.lorenzo.plogging.businesslogic.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import it.lasagni.lorenzo.plogging.businesslogic.dto.AttendedRaceDto;
 import it.lasagni.lorenzo.plogging.businesslogic.entity.Employee;
@@ -14,6 +15,7 @@ import it.lasagni.lorenzo.plogging.businesslogic.repository.EmployeeRepository;
 import it.lasagni.lorenzo.plogging.businesslogic.repository.RaceRepository;
 import it.lasagni.lorenzo.plogging.businesslogic.service.PloggingCommandService;
 
+@Service
 public class PloggingCommandServiceImpl implements PloggingCommandService {
 
     @Autowired
