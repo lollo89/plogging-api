@@ -1,0 +1,16 @@
+package it.lasagni.lorenzo.plogging.businesslogic.dto;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+@Getter
+@Setter
+@Accessors(chain = true)
+public class AttendedRaceDto {
+
+    private Integer employeeId;
+    private Integer raceId;
+    private Float pickedUpKilos;
+
+}
