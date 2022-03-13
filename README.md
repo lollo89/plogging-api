@@ -33,7 +33,7 @@
     docker run -p 8080:8080 lasagni/plogging
     ```
 
-2. Go to [Swagger UI page](http://localhost:8080/swagger-ui)
+2. Go to [Swagger UI page](http://localhost:8080/swagger-ui.html)
 
 3. Available employees are:
     - lorenzo@lasagni.test
