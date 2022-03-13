@@ -15,11 +15,17 @@
 
 1. Clone the repo:
 
-    ```git
+    ```bash
     git clone https://github.com/lollo89/plogging-api.git
     ```
 
-2. Build the application:
+2. Go to the project folder:
+
+    ```bash
+    cd plogging-api
+    ```
+
+3. Build the application:
 
     ```bash
     docker build -t lasagni/plogging .
