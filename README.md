@@ -22,7 +22,7 @@
 2. Build the application:
 
     ```bash
-    docker build -t lasagni/plogging
+    docker build -t lasagni/plogging .
     ```
 
 #### Usage
