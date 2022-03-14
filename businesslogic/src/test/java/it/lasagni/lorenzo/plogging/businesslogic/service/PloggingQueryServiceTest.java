@@ -20,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 
 import it.lasagni.lorenzo.plogging.businesslogic.dto.EmployeePickedUpKilosDto;
 import it.lasagni.lorenzo.plogging.businesslogic.dto.RaceDetailDto;
@@ -57,7 +58,7 @@ class PloggingQueryServiceTest {
 
         Date from = Date.from(Instant.now());
 
-        when(repository.findByRaceDateBetween(from, from)).thenReturn(races);
+        when(repository.findByRaceDateBetweenOrderByRaceDateAsc(from, from)).thenReturn(races);
 
         // act
         double value = service.getCompanyPickedUpKilos(from, from);
@@ -71,7 +72,7 @@ class PloggingQueryServiceTest {
 
         Date from = Date.from(Instant.now());
 
-        when(repository.findByRaceDateBetween(from, from)).thenReturn(List.of(races.get(0)));
+        when(repository.findByRaceDateBetweenOrderByRaceDateAsc(from, from)).thenReturn(List.of(races.get(0)));
 
         // act
         double value = service.getCompanyPickedUpKilos(from, from);
@@ -84,7 +85,7 @@ class PloggingQueryServiceTest {
         List<Race> races = loadTestData();
 
         Date from = Date.from(Instant.now());
-        when(repository.findByRaceDateBetween(from, from)).thenReturn(races);
+        when(repository.findByRaceDateBetweenOrderByRaceDateAsc(from, from)).thenReturn(races);
 
         // Act
         List<EmployeePickedUpKilosDto> kilosPerEmployees = service.getPickedUpKilosPerEmployee(from, from);
@@ -120,7 +121,7 @@ class PloggingQueryServiceTest {
     void testGetRaces_ObtainListOfRaceDto() {
         List<Race> races = loadTestData();
 
-        when(repository.findAll()).thenReturn(races);
+        when(repository.findAll(Sort.by(Sort.Direction.ASC, "raceDate"))).thenReturn(races);
 
 
         //Act
@@ -135,7 +136,7 @@ class PloggingQueryServiceTest {
     @Test
     void testGetCompanyPickedUpKilos_emptyReturn0() {
         Date from = Date.from(Instant.now());
-        when(repository.findByRaceDateBetween(from, from)).thenReturn(List.of());
+        when(repository.findByRaceDateBetweenOrderByRaceDateAsc(from, from)).thenReturn(List.of());
         
         var result = service.getCompanyPickedUpKilos(from, from);
 
@@ -147,7 +148,7 @@ class PloggingQueryServiceTest {
         List<Race> races = loadTestData();
 
         Date from = Date.from(Instant.now());
-        when(repository.findByRaceDateBetween(from, from)).thenReturn(races);
+        when(repository.findByRaceDateBetweenOrderByRaceDateAsc(from, from)).thenReturn(races);
         
         var result = service.getCompanyPickedUpKilos(from, from);
 

@@ -9,5 +9,5 @@ import it.lasagni.lorenzo.plogging.businesslogic.entity.Race;
 
 
 public interface RaceRepository extends JpaRepository<Race, Integer> { 
-    List<Race> findByRaceDateBetween(Date startDate, Date endDate);
+    List<Race> findByRaceDateBetweenOrderByRaceDateAsc(Date startDate, Date endDate);
 }

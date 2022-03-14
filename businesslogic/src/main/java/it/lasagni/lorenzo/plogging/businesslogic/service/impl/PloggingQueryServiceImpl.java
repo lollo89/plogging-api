@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import it.lasagni.lorenzo.plogging.businesslogic.dto.EmployeePickedUpKilosDto;
@@ -29,7 +30,7 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
     @Override
     public List<RaceDto> getRaces() {
         return this.raceRepository
-                    .findAll()
+                    .findAll(Sort.by(Sort.Direction.ASC, "raceDate"))
                     .stream()
                     .map(race -> RaceMapper.toRaceDto(race))
                     .collect(Collectors.toList());
@@ -49,7 +50,7 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
     {
 
         Set<Entry<Employee, Double>> pippo = this.raceRepository
-                                                    .findByRaceDateBetween(from, to)
+                                                    .findByRaceDateBetweenOrderByRaceDateAsc(from, to)
                                                     .stream()
                                                     .flatMap(race -> race.getRunners().stream())
                                                     .collect(
@@ -65,7 +66,7 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
 
     @Override
     public Double getCompanyPickedUpKilos(Date from, Date to) {
-        return this.raceRepository.findByRaceDateBetween(from, to)
+        return this.raceRepository.findByRaceDateBetweenOrderByRaceDateAsc(from, to)
                     .stream()
                     .flatMap(race -> race.getRunners().stream())
                     .mapToDouble(x -> x.getPickedUpKilograms())
