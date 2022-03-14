@@ -44,7 +44,6 @@ public class EmployeeRace {
         this.PickedUpKilograms = pickedUpKilograms;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -53,12 +52,12 @@ public class EmployeeRace {
             return false;
         }
         EmployeeRace employeeRace = (EmployeeRace) o;
-        return Objects.equals(Id, employeeRace.Id) && Objects.equals(Employee, employeeRace.Employee) && Objects.equals(Race, employeeRace.Race) && Objects.equals(PickedUpKilograms, employeeRace.PickedUpKilograms);
+        return Objects.equals(Id, employeeRace.Id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(Id, Employee, Race, PickedUpKilograms);
+        return Objects.hash(Id, PickedUpKilograms);
     }
 
 

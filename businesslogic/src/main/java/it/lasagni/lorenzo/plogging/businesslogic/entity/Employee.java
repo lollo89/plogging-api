@@ -1,6 +1,7 @@
 package it.lasagni.lorenzo.plogging.businesslogic.entity;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -43,6 +44,22 @@ public class Employee {
         this.lastName = LastName;
         this.email = Email;
         this.AttendedEvents = new HashSet<EmployeeRace>();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Employee)) {
+            return false;
+        }
+        Employee employee = (Employee) o;
+        return Objects.equals(Id, employee.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Id);
     }
     
     @Override

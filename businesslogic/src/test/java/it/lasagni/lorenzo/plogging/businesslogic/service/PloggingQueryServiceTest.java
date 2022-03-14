@@ -52,7 +52,7 @@ class PloggingQueryServiceTest {
     @Test
     void testGetCompanyPickedUpKilos_ifEmptyReturn0() {
         List<Race> races = List.of(
-            new Race().setId(1).setRaceDate(TEN_DAYS_AGO).setName("Test race")
+            new Race().setId(1).setName("Test race")
         );
 
         Date from = Date.from(Instant.now());
@@ -67,57 +67,21 @@ class PloggingQueryServiceTest {
 
     @Test
     void testGetCompanyPickedUpKilos_withOneRaceAndMultipleRunnerReturnSum() {
-        List<Race> races = List.of(
-            new Race().setId(1).setRaceDate(TEN_DAYS_AGO).setName("Test race").setRunners(
-                Set.of(new EmployeeRace().setPickedUpKilograms(15f),new EmployeeRace().setPickedUpKilograms(30f))
-            )
-        );
+        List<Race> races = loadTestData();
 
         Date from = Date.from(Instant.now());
 
-        when(repository.findByRaceDateBetween(from, from)).thenReturn(races);
+        when(repository.findByRaceDateBetween(from, from)).thenReturn(List.of(races.get(0)));
 
         // act
         double value = service.getCompanyPickedUpKilos(from, from);
 
-        assertEquals(45f, value);
-    }
-
-    @Test
-    void testGetCompanyPickedUpKilos_withMultipleRaceAndMultipleRunnerReturnSum() {
-        List<Race> races = List.of(
-            new Race().setId(1).setRaceDate(TEN_DAYS_AGO).setName("Test race").setRunners(
-                Set.of(new EmployeeRace().setPickedUpKilograms(15f),new EmployeeRace().setPickedUpKilograms(30f))
-            ),
-            new Race().setId(1).setRaceDate(FIVE_DAYS_AGO).setName("Test race 2").setRunners(
-                Set.of(new EmployeeRace().setPickedUpKilograms(5f),new EmployeeRace().setPickedUpKilograms(7f))
-            )
-        );
-
-        Date from = Date.from(Instant.now());
-
-        when(repository.findByRaceDateBetween(from, from)).thenReturn(races);
-
-        // act
-        double value = service.getCompanyPickedUpKilos(from, from);
-
-        assertEquals(57f, value);
+        assertEquals(86f, value);
     }
 
     @Test
     void testGetPickedUpKilosPerEmployee() {
-        Employee employee1 = new Employee().setId(10).setFirstName("Test").setLastName("One").setEmail("t.one@plogging.local");
-        Employee employee2 = new Employee().setId(12).setFirstName("Test").setLastName("Two").setEmail("t.two@plogging.local");
-
-        List<Race> races = List.of(
-            new Race().setId(1).setRaceDate(TEN_DAYS_AGO).setName("Test race"),
-            new Race().setId(2).setRaceDate(FIVE_DAYS_AGO).setName("Test race 2")
-        );
-
-        races.stream().forEach(race -> race.setRunners(Set.of(
-            new EmployeeRace(employee1, race, 5f * race.getId() * employee1.getId()),
-            new EmployeeRace(employee2, race, 3f * race.getId() * employee2.getId())
-        )));
+        List<Race> races = loadTestData();
 
         Date from = Date.from(Instant.now());
         when(repository.findByRaceDateBetween(from, from)).thenReturn(races);
@@ -133,16 +97,9 @@ class PloggingQueryServiceTest {
 
     @Test
     void testGetRaceDetail_returnRaceDto() {
-        Employee employee1 = new Employee().setId(10).setFirstName("Test").setLastName("One").setEmail("t.one@plogging.local");
-        Employee employee2 = new Employee().setId(12).setFirstName("Test").setLastName("Two").setEmail("t.two@plogging.local");
+        List<Race> races = loadTestData();
 
-        Race race = new Race().setId(1).setRaceDate(TEN_DAYS_AGO).setName("Test race");
-        race.setRunners(Set.of(
-            new EmployeeRace(employee1, race, 5f * race.getId() * employee1.getId()),
-            new EmployeeRace(employee2, race, 3f * race.getId() * employee2.getId())
-        ));
-
-        when(repository.findById(1)).thenReturn(Optional.of(race));
+        when(repository.findById(1)).thenReturn(Optional.of(races.get(0)));
 
         // Act
         RaceDetailDto raceDetail = service.getRaceDetail(1);
@@ -161,10 +118,7 @@ class PloggingQueryServiceTest {
 
     @Test
     void testGetRaces_ObtainListOfRaceDto() {
-        List<Race> races = List.of(
-            new Race().setId(1).setRaceDate(TEN_DAYS_AGO).setName("Test race"),
-            new Race().setId(2).setRaceDate(FIVE_DAYS_AGO).setName("Test race 2")
-        );
+        List<Race> races = loadTestData();
 
         when(repository.findAll()).thenReturn(races);
 
@@ -176,5 +130,46 @@ class PloggingQueryServiceTest {
         assertEquals(2, redRaces.size());
         assertTrue(redRaces.stream().anyMatch(race -> race.getName() == "Test race" && race.getId() == 1));
         assertTrue(redRaces.stream().anyMatch(race -> race.getName() == "Test race 2" && race.getId() == 2));
+    }
+
+    @Test
+    void testGetCompanyPickedUpKilos_emptyReturn0() {
+        Date from = Date.from(Instant.now());
+        when(repository.findByRaceDateBetween(from, from)).thenReturn(List.of());
+        
+        var result = service.getCompanyPickedUpKilos(from, from);
+
+        assertEquals(0, result);;
+    }
+
+    @Test
+    void testGetCompanyPickedUpKilos_withMultipleRaceAndMultipleRunnerReturnSum() {
+        List<Race> races = loadTestData();
+
+        Date from = Date.from(Instant.now());
+        when(repository.findByRaceDateBetween(from, from)).thenReturn(races);
+        
+        var result = service.getCompanyPickedUpKilos(from, from);
+
+        assertEquals(258, result);;
+    }
+
+
+
+    private List<Race> loadTestData() {
+        Employee employee1 = new Employee().setId(10).setFirstName("Test").setLastName("One").setEmail("t.one@plogging.local");
+        Employee employee2 = new Employee().setId(12).setFirstName("Test").setLastName("Two").setEmail("t.two@plogging.local");
+
+        List<Race> races = List.of(
+            new Race().setId(1).setRaceDate(TEN_DAYS_AGO).setName("Test race"),
+            new Race().setId(2).setRaceDate(FIVE_DAYS_AGO).setName("Test race 2")
+        );
+
+        races.stream().forEach(race -> race.setRunners(Set.of(
+            new EmployeeRace(employee1, race, 5f * race.getId() * employee1.getId()),
+            new EmployeeRace(employee2, race, 3f * race.getId() * employee2.getId())
+        )));
+
+        return races;
     }
 }
