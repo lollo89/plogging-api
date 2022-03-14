@@ -5,9 +5,9 @@
 ## Table of Contents
 
 - [Getting Started](#getting-started)
-- [Come contribuire](#come-contribuire)
-- [Manutenzione](#manutenzione)
-- [Licenza](#licenza)
+  - [Installation](#installation)
+  - [Usage](#usage)
+- [Note](#note)
 
 ### Getting Started
 
@@ -41,10 +41,11 @@
 
 2. Go to [Swagger UI page](http://localhost:8080/swagger-ui.html)
 
-3. Available employees are:
-    - lorenzo@lasagni.test
-    - simone@lasagni.test
-    - giacomo@lasagni.test
-    - giovanni@lasagni.test
-    - marco@lasagni.test
-    - luca@lasagni.test
+### Note
+
+The application load two set of example data.
+
+- The first one is created thanks to [java-faker](https://github.com/DiUS/java-faker) for query purpose. All the races in this set have been run before 2022-01-01.
+- The second set is created fot testing the 'race attended' method. The available employees are listed down here and the races has been run after 2022-01-01
+  - g.cancelli@plogging.local
+  - s.lavori@logging.local
